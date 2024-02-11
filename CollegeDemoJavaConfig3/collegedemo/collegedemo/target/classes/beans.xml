@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" 
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context 
+       http://www.springframework.org/schema/context/spring-context.xsd"> 
+
+    <bean id="wcc" class="com.college.collegedemo.College">
+        <property name="collegeName" value="WCC"/>
+        <property name="yearBuilt" value="1965"/>
+        <property name="zipCode" value="your_zip_code"/>
+        <property name="enrollment" value="18000"/>
+    </bean>
+
+    <bean id="communityCollegeService" class="com.college.collegedemo.CommunityCollegeService">
+    </bean>
+
+    <bean id="university" class="com.college.collegedemo.University">
+    </bean>
+
+    <context:annotation-config/>
+    <context:component-scan base-package="com.college.collegedemo.DIDemoApp"/>
+</beans>
