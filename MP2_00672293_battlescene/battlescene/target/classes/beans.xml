@@ -1,0 +1,42 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="com.battlescene.battlescene"/>
+    
+    <bean id="character1" class="com.battlescene.Character">
+        <property name="name" value="Keegan"/>
+        <property name="health" value="100"/>
+        <property name="strength" value="50"/>
+        <property name="fightingPower" ref="fireballFightingPower"/>
+    </bean>
+
+    <bean id="character2" class="com.battlescene.Character">
+        <property name="name" value="Java Bugs"/>
+        <property name="health" value="100"/>
+        <property name="strength" value="45"/>
+        <property name="fightingPower" ref="swordFightingPower"/>
+    </bean>
+    
+    <bean id="fireballFightingPower" class="com.battlescene.FireballFightingPower">
+    </bean>
+    
+    <bean id="swordFightingPower" class="com.battlescene.SwordFightingPower">
+    </bean>
+
+    <bean id="battle" class="com.battlescene.Battle">
+    <property name="character1" ref="character1"/>
+    <property name="character2" ref="character2"/>
+    <property name="battleground" ref="ocean"/> 
+</bean>
+    
+    <bean id="plains" class="com.battlescene.Plains" primary="true">
+</bean>
+
+<bean id="ocean" class="com.battlescene.Ocean">
+</bean>
+</beans>
