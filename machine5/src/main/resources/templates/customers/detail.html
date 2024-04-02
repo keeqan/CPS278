@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Detail</title>
+</head>
+<body>
+
+    <h1>Customer Details</h1>
+    
+    <div>
+        <h2>Personal Information</h2>
+        <p><strong>ID:</strong> <span th:text="${customer.id}"></span></p>
+        <p><strong>First Name:</strong> <span th:text="${customer.firstName}"></span></p>
+        <p><strong>Last Name:</strong> <span th:text="${customer.lastName}"></span></p>
+        
+        <div th:if="${customer.address != null}">
+            <h3>Address</h3>
+            <p><strong>Street:</strong> <span th:text="${customer.address.street}"></span></p>
+            <p><strong>City:</strong> <span th:text="${customer.address.city}"></span></p>
+            <p><strong>State:</strong> <span th:text="${customer.address.state}"></span></p>
+            <p><strong>Zip Code:</strong> <span th:text="${customer.address.zip}"></span></p>
+        </div>
+    </div>
+
+    <div th:if="${customer.orders != null and not #lists.isEmpty(customer.orders)}">
+        <h2>Orders</h2>
+        <ul>
+            <li th:each="order : ${customer.orders}">
+                <p>Order #<span th:text="${order.id}"></span>: <span th:text="${order.description}"></span></p>
+            </li>
+        </ul>
+    </div>
+    
+    <div>
+        <a href="/customers">Back to list</a>
+    </div>
+
+</body>
+</html>

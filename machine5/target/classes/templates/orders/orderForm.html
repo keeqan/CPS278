@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Pizza Order Form</title>
+</head>
+<body>
+<h1>Order Your Pizza</h1>
+<form action="#" th:action="@{/placeOrder}" th:object="${orderForm}" method="post">
+    <div>
+        <label for="name">Name:</label>
+        <input type="text" id="name" th:field="*{name}" required>
+    </div>
+    <div>
+        <label for="street">Street:</label>
+        <input type="text" id="street" th:field="*{street}" required>
+    </div>
+    <div>
+        <label for="zip">Zip Code:</label>
+        <input type="number" id="zip" th:field="*{zip}" required>
+    </div>
+    <div>
+        <label for="state">State:</label>
+        <select id="state" th:field="*{state}" required>
+            <option value="State1">Ohio</option>
+            <option value="State2">Michigan</option>
+            <option value="State3">Iowa</option>
+            <option value="State4">Illinois</option>
+            <option value="State5">Wisconsin</option>
+        </select>
+    </div>
+    <div>
+        <label>Pizza Size:</label>
+        <input type="radio" th:field="*{size}" value="Small" id="small" required><label for="small">Small</label>
+        <input type="radio" th:field="*{size}" value="Medium" id="medium"><label for="medium">Medium</label>
+        <input type="radio" th:field="*{size}" value="Large" id="large"><label for="large">Large</label>
+    </div>
+
+    <div>
+        <label>Pizza Toppings:</label>
+        <div><input type="checkbox" th:field="*{toppings}" value="Mushroom" id="toppingMushroom"><label for="toppingMushroom">Mushroom</label></div>
+        <div><input type="checkbox" th:field="*{toppings}" value="Pineapple" id="toppingPineapple"><label for="toppingPineapple">Pineapple</label></div>
+        <div><input type="checkbox" th:field="*{toppings}" value="Zucchini" id="toppingZucchini"><label for="toppingZucchini">Zucchini</label></div>
+        <div><input type="checkbox" th:field="*{toppings}" value="Tomato" id="toppingTomato"><label for="toppingTomato">Tomato</label></div>
+        <div><input type="checkbox" th:field="*{toppings}" value="Spinach" id="toppingSpinach"><label for="toppingSpinach">Spinach</label></div>
+        <div><input type="checkbox" th:field="*{toppings}" value="Artichoke" id="toppingArtichoke"><label for="toppingArtichoke">Artichoke</label></div>
+    </div>
+    
+    
+    <div>
+        <input type="submit" value="Place Order">
+    </div>
+
+
+    <div>
+        <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="validation-message"></div>
+    </div>
+    
+</form>
+</body>
+</html>
