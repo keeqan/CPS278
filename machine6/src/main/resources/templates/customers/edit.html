@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Customer</title>
+</head>
+<body>
+    <h1>Edit Customer</h1>
+
+    <form th:action="@{/customers/edit/{id}(id=${customer.id})}" th:object="${customer}" method="post">
+        <div>
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" th:field="*{firstName}" required>
+            <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="validation-message"></div>
+        </div>
+
+        <div>
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" th:field="*{lastName}" required>
+            <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="validation-message"></div>
+        </div>
+
+        <div>
+            <label for="street">Street:</label>
+            <input type="text" id="street" th:field="*{address.street}" required>
+            <div th:if="${#fields.hasErrors('address.street')}" th:errors="*{address.street}" class="validation-message"></div>
+        </div>
+        
+        <div>
+            <label for="city">City:</label>
+            <input type="text" id="city" th:field="*{address.city}" required>
+            <div th:if="${#fields.hasErrors('address.city')}" th:errors="*{address.city}" class="validation-message"></div>
+        </div>
+
+        <div>
+            <label for="state">State:</label>
+            <input type="text" id="state" th:field="*{address.state}" required>
+            <div th:if="${#fields.hasErrors('address.state')}" th:errors="*{address.state}" class="validation-message"></div>
+        </div>
+        
+        <div>
+            <label for="zip">Zip Code:</label>
+            <input type="text" id="zip" th:field="*{address.zip}" required>
+            <div th:if="${#fields.hasErrors('address.zip')}" th:errors="*{address.zip}" class="validation-message"></div>
+        </div>
+
+        <div>
+            <input type="submit" value="Save Changes">
+        </div>
+    </form>
+
+    <div>
+        <a href="/customers">Back to customer list</a>
+    </div>
+</body>
+</html>
