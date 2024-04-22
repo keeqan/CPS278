@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie List</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url('/images/background-image-url.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Movies</h1>
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Available Copies</th>
+                        <th>Genre</th>
+                        <th>Year Made</th>
+                        <th>Release Date</th>
+                        <th>Rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="movie : ${movies}">
+                        <td th:text="${movie.title}"></td>
+                        <td th:text="${movie.description}"></td>
+                        <td th:text="${movie.availableCopies}"></td>
+                        <td th:text="${movie.genre}"></td>
+                        <td th:text="${movie.yearMade}"></td>
+                        <td th:text="${movie.releaseDate}"></td>
+                        <td th:text="${movie.rating}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <h2>Add a new movie</h2>
+            <form th:action="@{/api/movies}" method="post">
+                <input type="text" name="title" placeholder="Title" required />
+                <input type="text" name="description" placeholder="Description" />
+                <input type="number" name="availableCopies" placeholder="Available Copies" required min="1" />
+                <input type="text" name="genre" placeholder="Genre" required />
+                <input type="number" name="yearMade" placeholder="Year Made" required />
+                <input type="date" name="releaseDate" placeholder="Release Date" required />
+                <input type="text" name="rating" placeholder="Rating" required  />
+                <button type="submit">Add Movie</button>
+            </form>
+
+            <div>
+                <h2>Search Movies</h2>
+                <form th:action="@{/api/movies/search}" method="get">
+                    <input type="text" name="query" placeholder="Search by title or description" required />
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie Checkout System Home</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('/images/background-image-url.jpg');
+            background-size: cover;
+            background-position: center;
+            color: #ffffff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        h1, h2 {
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-top: 10px;
+        }
+        a {
+            color: #FFD700; /* Gold color */
+            align-items: center;
+            text-decoration: none;
+            font-size: 36px;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the Movie Checkout System</h1>
+        <div>
+            <h2>Choose A Screen</h2>
+            <ul>
+                <li><a href="/customers">Customers Page</a></li>
+                <li><a href="/movies">Movies Page</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

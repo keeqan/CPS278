@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer List</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('/images/background-image-url.jpg');
+            background-size: cover;
+            background-position: center;
+            color: #ffffff; /* White text color for better readability on a dark background */
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        h1, h2 {
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background for text */
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+        form, table, #checkoutHistory, #searchResults {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8); /* Dark transparent background */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            border: 1px solid #ccc;
+            color: #fff; /* White text in tables */
+        }
+        th {
+            background-color: #666; /* Darker background for headers */
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 10px;
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.8); /* Slightly transparent inputs for visual integration */
+            border: none;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script>
+        function fetchCustomerCheckouts(customerId) {
+            const historyContainer = document.getElementById('checkoutHistory');
+            if (!customerId) {
+                historyContainer.innerHTML = ''; // Clear if no customer is selected
+                return;
+            }
+            fetch(`/api/customers/${customerId}/checkouts`)
+                .then(response => {
+                    if (!response.ok) throw new Error('Failed to fetch');
+                    return response.json();
+                })
+                .then(checkouts => {
+                    historyContainer.innerHTML = '<h3>Current Checkouts</h3>'; // Header for the section
+                    if (checkouts.length > 0) {
+                        const list = document.createElement('ul');
+                        checkouts.forEach(checkout => {
+                            const listItem = document.createElement('li');
+                            console.log('Checkout:', checkout);
+                            listItem.textContent = `${checkout.customerName} - ${checkout.movie.title} - Checked out on ${checkout.checkoutDate}`;
+
+                              const uncheckButton = document.createElement('button');
+                            uncheckButton.textContent = 'Uncheck';
+                            uncheckButton.onclick = () => uncheckMovie(checkout.id, customerId);
+                            listItem.appendChild(uncheckButton);
+
+                            list.appendChild(listItem);
+                        });
+                        historyContainer.appendChild(list);
+                    } else {
+                        historyContainer.innerHTML += '<p>No current checkouts for this customer.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching checkouts:', error);
+                    historyContainer.innerHTML = 'Failed to fetch checkouts.';
+                });
+        }
+
+        function uncheckMovie(checkoutId, customerId) {
+            fetch(`/api/checkouts/${checkoutId}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to uncheck the movie');
+                alert('Movie unchecked successfully!');
+                fetchCustomerCheckouts(customerId); // Refresh the list of checkouts
+            })
+            .catch(error => {
+                console.error('Error during uncheck:', error);
+                alert('Failed to uncheck the movie. Error: ' + error.message);
+            });
+        }
+
+        function searchMovies() {
+    const query = document.getElementById('movieSearchInput').value;
+    const searchResultsContainer = document.getElementById('searchResults');
+
+    fetch(`/api/movies/search?query=${encodeURIComponent(query)}`)
+        .then(response => response.json())
+        .then(movies => {
+            searchResultsContainer.innerHTML = ''; // Clear previous results
+            if (movies.length > 0) {
+                const list = document.createElement('ul');
+                movies.forEach(movie => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${movie.title} - ${movie.description}`;
+                    const checkoutButton = document.createElement('button');
+                    checkoutButton.textContent = 'Checkout';
+                    checkoutButton.onclick = () => checkoutMovie(movie.id);
+                    listItem.appendChild(checkoutButton);
+                    list.appendChild(listItem);
+                });
+                searchResultsContainer.appendChild(list);
+            } else {
+                searchResultsContainer.innerHTML = '<p>No movies found.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Error searching movies:', error);
+            searchResultsContainer.innerHTML = 'Failed to search movies.';
+        });
+}
+
+        function checkoutMovie(movieId) {
+    const customerId = document.querySelector('select[name="customerId"]').value;
+    if (!customerId) {
+        alert('Please select a customer first.');
+        return;
+    }
+
+     // Corrected data structure
+     const data = {
+        customer: {
+            id: customerId
+        },
+        movie: {
+            id: movieId
+        },
+        checkoutDate: new Date().toISOString().split('T')[0]  // Today's date in YYYY-MM-DD format
+    };
+
+    console.log("Sending checkout data:", JSON.stringify(data));
+
+    fetch('/api/checkouts', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Checkout failed');
+        return response.json();
+    })
+    .then(result => {
+        alert('Movie checked out successfully!');
+        fetchCustomerCheckouts(customerId); // Refresh the checkouts list
+    })
+    .catch(error => {
+        console.error('Error during checkout:', error);
+        alert('Failed to checkout the movie. Error: ' + error.message);
+    });
+}
+
+
+
+
+
+
+    </script>
+
+<script>
+    document.getElementById('addCustomerForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        const formData = new FormData(this);
+        const name = formData.get('name'); // Assuming the input field for customer name is 'name'
+
+        fetch('/api/customers', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name: name })
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Failed to create customer');
+            return response.json();
+        })
+        .then(data => {
+            console.log('Customer created:', data);
+            alert('Customer added successfully!');
+            // Optionally, clear the form or add further handling here
+            this.reset();
+        })
+        .catch(error => {
+            console.error('Error creating customer:', error);
+            alert('Failed to add customer. Error: ' + error.message);
+        });
+    });
+</script>
+
+</head>
+<body>
+    <h1>Customers</h1>
+    <div>
+        <h2>Choose a Customer</h2>
+        <form>
+            <select name="customerId" onchange="fetchCustomerCheckouts(this.value)">
+                <option value="">Select a Customer</option>
+                <option th:each="customer : ${customers}" th:value="${customer.id}" th:text="${customer.name}">Customer Name</option>
+            </select>
+        </form>
+    </div>
+    <div id="checkoutHistory"></div>
+    <div>
+        <h2>Search Movies</h2>
+        <input type="text" id="movieSearchInput" placeholder="Search movies...">
+        <button onclick="searchMovies()">Search</button>
+        <div id="searchResults"></div>
+    </div>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="customer : ${customers}">
+                    <td th:text="${customer.name}">Name</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <h2>Add a new customer</h2>
+        <form id="addCustomerForm">
+            <input type="text" name="name" placeholder="Name" required />
+            <button type="submit">Add Customer</button>
+        </form>
+    </div>
+</body>
+</html>
